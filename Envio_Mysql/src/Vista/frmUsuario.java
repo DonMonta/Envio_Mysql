@@ -7,6 +7,7 @@ package Vista;
 import Controlador.Ctrl_Usuarios;
 import Modelo.Consulta_Usuarios;
 import Modelo.Usuarios;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -135,18 +136,33 @@ public class frmUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnregistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregistrarseActionPerformed
-        Usuarios usuarios = new Usuarios();
-        Consulta_Usuarios consulta_Usuarios = new Consulta_Usuarios();
-        String user,correo,clave;
-        user=this.txtnombre.getText();
-        correo=this.txtcorreo.getText();
-        clave=this.txtcontrase.getText();
-        Ctrl_Usuarios ctrl=new Ctrl_Usuarios(usuarios, consulta_Usuarios);
-        if(ctrl.Guardar(user, correo, clave)){
-            this.txtnombre.setText("");
-            this.txtcorreo.setText("");
-            this.txtcontrase.setText("");
+         if("".equals(txtnombre.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese datos en el campo usuario");
         }
+        else if("".equals(txtcontrase.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese datos en el campo Clave");
+        }else if("".equals(txtcorreo.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese datos en el campo Correo");
+        }else{
+            Usuarios usuarios = new Usuarios();
+            Consulta_Usuarios consulta_Usuarios = new Consulta_Usuarios();
+            String user,correo,clave;
+            user=this.txtnombre.getText();
+            correo=this.txtcorreo.getText();
+            clave=this.txtcontrase.getText();
+            Ctrl_Usuarios ctrl=new Ctrl_Usuarios(usuarios, consulta_Usuarios);
+            if(ctrl.Guardar(user, correo, clave)){
+                this.txtnombre.setText("");
+                this.txtcorreo.setText("");
+                this.txtcontrase.setText("");
+            }else{
+                this.txtnombre.setText("");
+                this.txtcorreo.setText("");
+                this.txtcontrase.setText("");
+            }
+        
+        }
+         
         
     }//GEN-LAST:event_btnregistrarseActionPerformed
 

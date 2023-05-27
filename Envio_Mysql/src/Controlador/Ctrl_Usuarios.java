@@ -12,21 +12,24 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.mail.Authenticator;
 import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
+
+import javax.net.ssl.X509TrustManager;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import javax.swing.JOptionPane;
 
 /**
@@ -42,7 +45,7 @@ public class Ctrl_Usuarios {
     String original_valor ="mi_clave_oculta";
     // Variables para el envio de correo
     private static String remitente="soporte.tecnico.2023.dm@gmail.com";
-    private static String clave_remitente="hdcjrpazyljrmkcd";
+    private static String clave_remitente="zjayvubdpmuinmtr";
     public static String destinatario;
     private String emailTo;
     private String titulo;
@@ -68,11 +71,111 @@ public class Ctrl_Usuarios {
         String encriptacion = Encriptar(pwd);
         
         usuarios.setPassword(encriptacion);
-        if(consulta_Usuarios.Guardar(usuarios)){
+        if(consulta_Usuarios.ExisteUsuario(usuarios)){
+             JOptionPane.showMessageDialog(null, "EL Usuario Ya Existe Ingrese Otro usuario");
+             return false;
+        }
+        else if(consulta_Usuarios.ExisteCorreoUsuario(usuarios)){
+             JOptionPane.showMessageDialog(null, "EL Correo Ya Existe Ingrese Otro correo");
+             return false;
+        }
+        else if(!ValidarCorreo(correo)){
+             JOptionPane.showMessageDialog(null, "EL Correo Ingresado No es Valido");
+             return false;
+        }
+        else if(consulta_Usuarios.Guardar(usuarios)){
             JOptionPane.showMessageDialog(null, "Usuario Registrado");
             return true;
         }
         return false;
+    }
+    public boolean CorreoCorrexto(String correos){
+        try {
+            String cod = generarCodigoVerificacion();
+           String correoVer = "soporte.tecnico.2023.dm@gmail.com";
+            String dominio = correos.substring(correos.indexOf("@")+1);
+            
+            //Configurar propidades para la conexion SMTP
+            Properties pros = new Properties();
+             pros.put("mail.smtp.host", "smtp." + dominio);
+             pros.put("mail.smtp.port", "587");
+             pros.put("mail.smtp.starttls.enable", "true");
+             pros.put("mail.smtp.auth", "true");
+             pros.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+             
+             //Configurar un TrustManager presonalizado para aceptar todos los certificados SSL
+             // Configurar un TrustManager personalizado para aceptar todos los certificados SSL
+            TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return null;
+                        }
+
+                        public void checkClientTrusted(
+                                java.security.cert.X509Certificate[] certs, String authType) {
+                        }
+
+                        public void checkServerTrusted(
+                                java.security.cert.X509Certificate[] certs, String authType) {
+                        }
+                    }
+            };
+             //Obtener una instancia de SSLContext  y Configuara el TrustManager personalizado
+             SSLContext sSLContext = SSLContext.getInstance("SSL");
+             sSLContext.init(null, trustAllCerts, new java.security.SecureRandom());
+             SSLContext.setDefault(sSLContext);
+             Session session= Session.getInstance(pros,new Authenticator(){
+                 protected PasswordAuthentication getPasswordAuthentication(){
+                  return new PasswordAuthentication("soporte.tecnico.2023.dm@gmail.com","zjayvubdpmuinmtr");
+                 }
+             });
+             //Crear  el mensaje de correo electronico para la verificacion
+             Message mensaje = new MimeMessage(session);
+             mensaje.setFrom(new InternetAddress(correoVer));
+             mensaje.setRecipients(Message.RecipientType.TO, InternetAddress.parse(correos));
+             mensaje.setSubject("Validacion de correo electronico");
+             mensaje.setText("Correo Verificado. Tu codigo de Verificacion es: " + cod);
+             
+             //Enviar el mensaje 
+             
+             Transport.send(mensaje);
+             // Validar Codigo de Verificacion
+             String codingres = JOptionPane.showInputDialog("Ingrese el codigo de verificacion enviado al correo "+correos);
+             while(codingres !=null){
+                 if(codingres.equals(cod)){
+                     JOptionPane.showMessageDialog(null, "Codigo de verificacion correcto. El correo es Valido");
+                     return true;
+                 }else{
+                     JOptionPane.showMessageDialog(null, "Codigo de verificacion incorrecto");
+                 }
+             }
+             return false;
+             
+            
+        } catch (Exception e) {
+            return false;
+        }
+        
+    }
+    public String generarCodigoVerificacion(){
+        Random random= new Random();
+        int codigo = 100000 + random.nextInt(900000);
+        return String.valueOf(codigo);
+    }
+    
+    public boolean ValidarCorreo(String correos){
+        boolean valido = false;
+        try {
+            InternetAddress internetAddress = new InternetAddress(correos);
+            internetAddress.validate();
+            valido=true;
+            if(valido){
+                valido=CorreoCorrexto(correos);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error "+e);
+        }
+        return valido;
     }
     public SecretKeySpec generarClave(String llave){
         try {

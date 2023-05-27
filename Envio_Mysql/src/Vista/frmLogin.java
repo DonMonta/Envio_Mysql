@@ -7,6 +7,10 @@ package Vista;
 import Controlador.Ctrl_Usuarios;
 import Modelo.Consulta_Usuarios;
 import Modelo.Usuarios;
+import java.awt.Color;
+import javax.swing.JOptionPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 /**
  *
@@ -20,6 +24,9 @@ public class frmLogin extends javax.swing.JFrame {
     public frmLogin() {
         initComponents();
         this.setLocationRelativeTo(null);
+        char echoChar= '*';
+        this.txtclave.setEchoChar(echoChar);
+        this.txtclave.setForeground(Color.BLACK);
     }
 
     /**
@@ -35,25 +42,30 @@ public class frmLogin extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtnombre = new javax.swing.JTextField();
-        txtcontrase = new javax.swing.JTextField();
         btningresar = new javax.swing.JButton();
         btnolvidado = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        txtclave = new javax.swing.JPasswordField();
+        btnver = new javax.swing.JButton();
+        btnocultar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Login");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 32, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Ingrese Usuario");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(43, 95, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Ingrese Contraseña");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(43, 208, -1, -1));
 
         txtnombre.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        txtcontrase.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        getContentPane().add(txtnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 92, 182, -1));
 
         btningresar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btningresar.setText("Ingresar");
@@ -62,6 +74,7 @@ public class frmLogin extends javax.swing.JFrame {
                 btningresarActionPerformed(evt);
             }
         });
+        getContentPane().add(btningresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, -1, -1));
 
         btnolvidado.setText("Has olvidado Tu Contraseña");
         btnolvidado.addActionListener(new java.awt.event.ActionListener() {
@@ -69,6 +82,7 @@ public class frmLogin extends javax.swing.JFrame {
                 btnolvidadoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnolvidado, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, -1, -1));
 
         jButton1.setText("Registrate");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -76,69 +90,55 @@ public class frmLogin extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 335, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(226, 226, 226)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtcontrase, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(btningresar)
-                        .addGap(141, 141, 141)
-                        .addComponent(btnolvidado)))
-                .addContainerGap(63, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel1)
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(68, 68, 68)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtcontrase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btningresar)
-                    .addComponent(btnolvidado))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(31, Short.MAX_VALUE))
-        );
+        txtclave.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        getContentPane().add(txtclave, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 205, 182, 40));
+
+        btnver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8_eye_24px.png"))); // NOI18N
+        btnver.setBorder(null);
+        btnver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnverActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnver, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 210, 38, 31));
+
+        btnocultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8_eyelashes_2d_24px.png"))); // NOI18N
+        btnocultar.setBorder(null);
+        btnocultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnocultarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnocultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 210, 38, 31));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btningresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btningresarActionPerformed
-        Usuarios usuarios = new Usuarios();
-        Consulta_Usuarios consulta_Usuarios = new Consulta_Usuarios();
-        String user,clave;
-        user=this.txtnombre.getText();
-        clave=this.txtcontrase.getText();
-        Ctrl_Usuarios ctrl=new Ctrl_Usuarios(usuarios, consulta_Usuarios);
-        if(ctrl.Login(user, clave)){
-            this.txtnombre.setText("");
-            this.txtcontrase.setText("");
+        if("".equals(txtnombre.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese datos en el campo usuario");
         }
+        else if("".equals(txtclave.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese datos en el campo Clave");
+        }else{
+            Usuarios usuarios = new Usuarios();
+            Consulta_Usuarios consulta_Usuarios = new Consulta_Usuarios();
+            String user,clave;
+            user=this.txtnombre.getText();
+            clave=this.txtclave.getText();
+            Ctrl_Usuarios ctrl=new Ctrl_Usuarios(usuarios, consulta_Usuarios);
+            if(ctrl.Login(user, clave)){
+                this.txtnombre.setText("");
+                this.txtclave.setText("");
+            }
+            else{
+                this.txtnombre.setText("");
+                this.txtclave.setText("");
+            }
+        }
+        
 
     }//GEN-LAST:event_btningresarActionPerformed
 
@@ -153,6 +153,22 @@ public class frmLogin extends javax.swing.JFrame {
        usuario.setVisible(true);
        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnverActionPerformed
+        txtclave.setEchoChar((char) 0);
+        btnver.setVisible(false);
+        btnocultar.setVisible(true);
+    }//GEN-LAST:event_btnverActionPerformed
+
+    private void btnocultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnocultarActionPerformed
+        char echoChar= '*';
+        SimpleAttributeSet attributeSet = new SimpleAttributeSet();
+        StyleConstants.setBold(attributeSet, true);
+        this.txtclave.setEchoChar(echoChar);
+        this.txtclave.setForeground(Color.BLACK);
+         btnver.setVisible(true);
+        btnocultar.setVisible(false);
+    }//GEN-LAST:event_btnocultarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,12 +207,14 @@ public class frmLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btningresar;
+    private javax.swing.JButton btnocultar;
     private javax.swing.JButton btnolvidado;
+    private javax.swing.JButton btnver;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField txtcontrase;
+    private javax.swing.JPasswordField txtclave;
     private javax.swing.JTextField txtnombre;
     // End of variables declaration//GEN-END:variables
 }
